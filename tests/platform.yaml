@@ -13,12 +13,12 @@ spec:
           repoURL: https://github.com/driosalido/platform-engineering-poc.git
           revision: HEAD
           files:
-          - path: tests/apps/**/
+          - path: tests/apps/*
       - git:
           repoURL: https://github.com/driosalido/platform-engineering-poc.git
           revision: HEAD
           files:
-          - path: tests/clusters/**/
+          - path: tests/clusters/*
 
   template:
     metadata:
