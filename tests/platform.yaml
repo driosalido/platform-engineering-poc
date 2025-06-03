@@ -26,8 +26,8 @@ spec:
     spec:
       project: default
       source:
-        repoURL: '{{app.source.repoURL}}'
-        targetRevision: '{{#app.source.chart}}{{app.source.version}}{{/app.source.chart}}{{^app.source.chart}}{{cluster.platform_version}}{{/app.source.chart}}'
+        repoURL: '{{.app.source.repoURL}}'
+        targetRevision: HEAD
         path: '{{.path.path}}'
       destination:
         server: '{{.cluster.server}}'
@@ -35,3 +35,18 @@ spec:
       syncPolicy:
         syncOptions:
         - CreateNamespace=true
+  templatePatch: |
+    spec:
+      source:
+        {{- if .app.source.chart }}
+        chart: {{ .app.source.chart }}
+        targetRevision: {{ .app.source.version }}
+        helm:
+          values: |
+            {{ .app.helm_values | nindent 10 }}
+          parameters:
+          {{- range .app.helm_parameters }}
+          - name: {{ .name }}
+            value: {{ index $.variables .value }}
+          {{- end }}
+        {{- end }}

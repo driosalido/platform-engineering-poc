@@ -1,0 +1,47 @@
+app:
+  name: ingress-nginx
+  namespace: ingress-nginx
+  source:
+    repoURL: https://kubernetes.github.io/ingress-nginx
+    chart: ingress-nginx
+    version: "4.7.1"
+
+  helm_values: |
+    controller:
+      service:
+        type: LoadBalancer
+        annotations:
+          service.beta.kubernetes.io/aws-load-balancer-type: nlb
+          service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+          service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+      
+      config:
+        use-proxy-protocol: "false"
+        compute-full-forwarded-for: "true"
+        use-forwarded-headers: "true"
+      
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+      
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits:
+          cpu: 500m
+          memory: 512Mi
+      
+      autoscaling:
+        enabled: true
+        minReplicas: INGRESS_REPLICAS_PLACEHOLDER
+        maxReplicas: 10
+        targetCPUUtilizationPercentage: 70
+        targetMemoryUtilizationPercentage: 70
+
+  helm_parameters:
+  - name: controller.replicaCount
+    value: ingress_replicas
+  - name: controller.service.annotations.service\.beta\.kubernetes\.io/aws-load-balancer-subnets
+    value: aws_region  # Esto se puede construir dinámicamente si necesitas

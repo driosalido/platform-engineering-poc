@@ -1,0 +1,6 @@
+app:
+  name: logging
+  namespace: logging
+  source:
+    repoURL: https://github.com/driosalido/platform-engineering-poc.git
+    path: apps/logging

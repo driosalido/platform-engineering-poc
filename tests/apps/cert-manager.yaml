@@ -1,0 +1,36 @@
+app:
+  name: cert-manager
+  namespace: cert-manager
+  source:
+    repoURL: https://charts.jetstack.io
+    chart: cert-manager
+    version: "1.12.0"
+
+  helm_values: |
+    installCRDs: true
+    
+    webhook:
+      securePort: 10260
+    
+    cainjector:
+      enabled: true
+      resources:
+        requests:
+          cpu: 50m
+          memory: 64Mi
+        limits:
+          cpu: 100m
+          memory: 128Mi
+    
+    startupapicheck:
+      enabled: true
+    
+    global:
+      leaderElection:
+        namespace: cert-manager
+
+  helm_parameters:
+  - name: resources.requests.cpu
+    value: cert_manager_cpu
+  - name: resources.requests.memory
+    value: cert_manager_memory

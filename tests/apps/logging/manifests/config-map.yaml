@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-bit-config
+  namespace: logging
+data:
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush        1
+        Daemon       Off
+        Log_Level    $(LOG_LEVEL)
+        
+    [INPUT]
+        Name              tail
+        Path              /var/log/containers/*.log
+        Parser            cri
+        Tag               kube.*
+        Refresh_Interval  10
+        
+    [OUTPUT]
+        Name              cloudwatch_logs
+        Match             *
+        region            $(AWS_REGION)
+        log_group_name    /aws/eks/cluster/fluent-bit
+        auto_create_group On
+        log_retention_days 7
