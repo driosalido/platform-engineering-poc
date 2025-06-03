@@ -27,7 +27,7 @@ spec:
       project: default
       source:
         repoURL: '{{.app.source.repoURL}}'
-        targetRevision: HEAD
+        targetRevision: master
         path: '{{.path.path}}'
       destination:
         server: '{{.cluster.server}}'
