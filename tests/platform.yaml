@@ -47,6 +47,6 @@ spec:
           parameters:
           {{- range .app.helm_parameters }}
           - name: {{ .name }}
-            value: {{ printf "%s" (index $.variables .value) }}
+            value: {{ get $.variables .value | printf "%s" | quote }}
           {{- end }}
         {{- end }}
