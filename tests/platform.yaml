@@ -51,19 +51,5 @@ spec:
           {{- end }}
           {{- end }}
         {{- else }}
-          path: {{ .app.source.path }}
-          kustomize:
-            patches:
-            - target:
-                kind: ConfigMap
-                name: cluster-config
-              patch: |-
-                apiVersion: v1
-                kind: ConfigMap
-                metadata:
-                  name: cluster-config
-                data:
-                  aws_region: {{ .variables.aws_region }}
-                  log_level: {{ .variables.log_level }}
-                  base_domain: {{ .variables.base_domain }}          
+          path: {{ .app.source.path }}      
         {{- end }}
