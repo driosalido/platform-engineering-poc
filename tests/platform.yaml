@@ -27,8 +27,7 @@ spec:
       project: default
       source:
         repoURL: '{{.app.source.repoURL}}'
-        targetRevision: master
-        path: '{{.path.path}}'
+        targetRevision: HEAD
       destination:
         server: '{{.cluster.server}}'
         namespace: '{{.app.namespace}}'
@@ -44,9 +43,16 @@ spec:
         helm:
           values: |
             {{ .app.helm_values | nindent 10 }}
+          {{- if .app.helm_parameters }}
           parameters:
           {{- range .app.helm_parameters }}
           - name: {{ .name }}
             value: {{ get $.variables .value | printf "%s" | quote }}
           {{- end }}
+          {{- end }}
+        {{- else }}
+        # Si no es Helm (por ejemplo, es Kustomize), puedes definir aquí cosas opcionales
+        # Este bloque se incluirá solo si no hay `chart` en el YAML del app
+        # Por ejemplo, podrías sobreescribir path si fuera necesario, o dejarlo vacío
+          path: {{ .app.source.path }}
         {{- end }}
