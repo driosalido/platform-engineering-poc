@@ -25,10 +25,3 @@ vars:
     apiVersion: v1
   fieldref:
     fieldpath: data.log_level
-
-configMapGenerator:
-- name: cluster-config
-  literals:
-  - aws_region=$(AWS_REGION)
-  - log_level=$(LOG_LEVEL)
-  - base_domain=$(BASE_DOMAIN)

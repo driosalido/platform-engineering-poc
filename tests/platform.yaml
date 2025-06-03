@@ -51,8 +51,19 @@ spec:
           {{- end }}
           {{- end }}
         {{- else }}
-        # Si no es Helm (por ejemplo, es Kustomize), puedes definir aquí cosas opcionales
-        # Este bloque se incluirá solo si no hay `chart` en el YAML del app
-        # Por ejemplo, podrías sobreescribir path si fuera necesario, o dejarlo vacío
           path: {{ .app.source.path }}
+          kustomize:
+            patches:
+            - target:
+                kind: ConfigMap
+                name: cluster-config
+              patch: |-
+                apiVersion: v1
+                kind: ConfigMap
+                metadata:
+                  name: cluster-config
+                data:
+                  aws_region: {{ .variables.aws_region }}
+                  log_level: {{ .variables.log_level }}
+                  base_domain: {{ .variables.base_domain }}          
         {{- end }}
