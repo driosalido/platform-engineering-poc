@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: cluster-addons
+  name: platform
   namespace: argocd
 spec:
   goTemplate: true
@@ -12,8 +12,8 @@ spec:
       - git:
           repoURL: https://github.com/driosalido/platform-engineering-poc.git
           revision: HEAD
-          directories:
-          - path: tests/cluster-addons/*
+          files:
+          - path: tests/apps/*
       - git:
           repoURL: https://github.com/driosalido/platform-engineering-poc.git
           revision: HEAD
@@ -22,12 +22,12 @@ spec:
 
   template:
     metadata:
-      name: '{{.path.basename}}-{{.cluster.environment}}'
+      name: '{{.app.name}}-{{.cluster.environment}}'
     spec:
       project: default
       source:
-        repoURL: https://github.com/argoproj/argo-cd.git
-        targetRevision: HEAD
+        repoURL: '{{app.source.repoURL}}'
+        targetRevision: '{{#app.source.chart}}{{app.source.version}}{{/app.source.chart}}{{^app.source.chart}}{{cluster.platform_version}}{{/app.source.chart}}'
         path: '{{.path.path}}'
       destination:
         server: '{{.cluster.server}}'

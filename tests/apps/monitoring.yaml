@@ -1,0 +1,99 @@
+app:
+  name: monitoring
+  namespace: monitoring
+  source:
+    repoURL: https://prometheus-community.github.io/helm-charts
+    chart: kube-prometheus-stack
+    version: "45.7.1"
+  
+  # Valores fijos globales
+  helm_values: |
+    grafana:
+      ingress:
+        enabled: true
+        ingressClassName: nginx
+        tls:
+        - secretName: grafana-tls
+          hosts:
+          - GRAFANA_HOST_PLACEHOLDER
+      adminPassword: admin123
+      persistence:
+        enabled: true
+        size: 8Gi
+        storageClassName: STORAGE_CLASS_PLACEHOLDER
+    
+    prometheus:
+      prometheusSpec:
+        retention: PROMETHEUS_RETENTION_PLACEHOLDER
+        storageSpec:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: STORAGE_CLASS_PLACEHOLDER
+              resources:
+                requests:
+                  storage: PROMETHEUS_STORAGE_PLACEHOLDER
+        resources:
+          requests:
+            memory: PROMETHEUS_MEMORY_PLACEHOLDER
+            cpu: PROMETHEUS_CPU_PLACEHOLDER
+        
+    alertmanager:
+      alertmanagerSpec:
+        storage:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: STORAGE_CLASS_PLACEHOLDER
+              resources:
+                requests:
+                  storage: 10Gi
+    
+    nodeExporter:
+      enabled: true
+    
+    kubeStateMetrics:
+      enabled: true
+    
+    defaultRules:
+      create: true
+      rules:
+        alertmanager: true
+        etcd: true
+        configReloaders: true
+        general: true
+        k8s: true
+        kubeApiserver: true
+        kubeApiserverAvailability: true
+        kubeApiserverSlos: true
+        kubelet: true
+        kubeProxy: true
+        kubePrometheusGeneral: true
+        kubePrometheusNodeRecording: true
+        kubernetesApps: true
+        kubernetesResources: true
+        kubernetesStorage: true
+        kubernetesSystem: true
+        network: true
+        node: true
+        nodeExporterAlerting: true
+        nodeExporterRecording: true
+        prometheus: true
+        prometheusOperator: true
+
+  # Variables que se reemplazan por cluster
+  helm_parameters:
+  - name: grafana.ingress.hosts[0]
+    value: grafana_host
+  - name: grafana.persistence.storageClassName
+    value: storage_class
+  - name: prometheus.prometheusSpec.retention
+    value: prometheus_retention
+  - name: prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.storageClassName
+    value: storage_class
+  - name: prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage
+    value: prometheus_storage
+  - name: prometheus.prometheusSpec.resources.requests.memory
+    value: prometheus_memory
+  - name: prometheus.prometheusSpec.resources.requests.cpu
+    value: prometheus_cpu
+  - name: alertmanager.alertmanagerSpec.storage.volumeClaimTemplate.spec.storageClassName
+    value: storage_class
