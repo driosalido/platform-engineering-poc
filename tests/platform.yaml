@@ -38,7 +38,7 @@ spec:
   templatePatch: |
     spec:
       source:
-        {{- if .app.source.chart }}
+        {{- if hasKey .app.source "chart" }}
         chart: {{ .app.source.chart }}
         targetRevision: {{ .app.source.version }}
         helm:
