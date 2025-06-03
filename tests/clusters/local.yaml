@@ -18,6 +18,6 @@ variables:
   prometheus_storage: 50Gi
   prometheus_memory: 1Gi
   prometheus_cpu: 500m
-  ingress_replicas: 1
+  ingress_replicas: "1"
   cert_manager_cpu: 50m
   cert_manager_memory: 64Mi

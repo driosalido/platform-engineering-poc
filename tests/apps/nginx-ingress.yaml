@@ -44,4 +44,4 @@ app:
   - name: controller.replicaCount
     value: ingress_replicas
   - name: controller.service.annotations.service\.beta\.kubernetes\.io/aws-load-balancer-subnets
-    value: aws_region  # Esto se puede construir dinámicamente si necesitas
+    value: aws_region
