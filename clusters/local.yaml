@@ -1,4 +1,4 @@
 clusterName: local
-platformRevision: v0.1.0      # la versión que quiero desplegar
+platformRevision: v0.1.0
 region: local
 awsAccountId: "000000000000"

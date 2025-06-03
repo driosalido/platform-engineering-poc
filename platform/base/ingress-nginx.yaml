@@ -18,9 +18,8 @@ spec:
       values: |
         controller:
           replicaCount: 2
-          service:
           nodeSelector:
-            topology.kubernetes.io/region: {{ .region }}
+            topology.kubernetes.io/region: $(REGION)
   syncPolicy:
     automated:
       prune: true

@@ -1,0 +1,16 @@
+generatorOptions:
+  disableNameSuffixHash: true      # nombre estable: platform-vars
+
+configMapGenerator:
+  - name: platform-vars            # se rellenará vía ApplicationSet
+    literals: []                   # placeholder vacío
+
+vars:                              # sólo las variables usadas como $(VAR)
+  - name: REGION
+    objref: {kind: ConfigMap, name: platform-vars}
+    fieldref: {fieldpath: data.region}
+
+  # si otro manifiesto usa $(AWS_ACCOUNT_ID) añadirías:
+  # - name: AWS_ACCOUNT_ID
+  #   objref: {kind: ConfigMap, name: platform-vars}
+  #   fieldref: {fieldpath: data.awsAccountId}
