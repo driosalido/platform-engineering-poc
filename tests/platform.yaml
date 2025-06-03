@@ -31,7 +31,7 @@ spec:
         path: '{{.path.path}}'
       destination:
         server: '{{.cluster.server}}'
-        namespace: '{{.path.basename}}'
+        namespace: '{{.app.namespace}}'
       syncPolicy:
         syncOptions:
         - CreateNamespace=true
